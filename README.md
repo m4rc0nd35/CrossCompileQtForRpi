@@ -1,4 +1,4 @@
-# Cross compilation of Qt6.5.1 for RPI
+# Cross compilation of Qt6.8.1 for RPI
 This page shows steps to compile Qt6.5.1 for RPI. Hope this page will help those stuck at following official tutorial. Before start, it is highly recommended that you use the same Ubuntu 22.04. At least not the older one. 
 
 Click the follow image to view this tutorial on Youtube.
@@ -88,7 +88,8 @@ Make a folder for the compiler installation.
 ```
 sudo mkdir -p /opt/cross-pi-gcc
 sudo chown $USER /opt/cross-pi-gcc
-export PATH=/opt/cross-pi-gcc/bin:$PATH
+nano ~/.bashrc # add export PATH=/opt/cross-pi-gcc/bin:$PATH
+source ~/.bashrc 
 ```
 Copy the kernel headers in the above folder.
 ```
@@ -107,6 +108,8 @@ make install
 ```
 Edit gcc-10.3.0/libsanitizer/asan/asan_linux.cpp. Add following piece of code.
 ```
+cd ~/gcc_all
+
 #ifndef PATH_MAX
 #define PATH_MAX 4096
 #endif
