@@ -60,8 +60,6 @@ git clone https://github.com/Kitware/CMake.git
 cd CMake
 ./bootstrap && make -j8&& sudo make install
 ```
-![image](https://github.com/MuyePan/CrossCompileQtForRpi/assets/136073506/e11f4e6c-a4c0-4f03-86dc-b6d463bab80b)
-
 Folder CMake is not need any more. You can delete it.
 
 ## Build gcc as a cross compiler
@@ -93,7 +91,7 @@ export PATH=/opt/cross-pi-gcc/bin:$PATH
 Copy the kernel headers in the above folder.
 ```
 cd ~/gcc_all
-cd linux
+cd linux/
 KERNEL=kernel7
 make ARCH=arm64 INSTALL_HDR_PATH=/opt/cross-pi-gcc/aarch64-linux-gnu headers_install
 ```
@@ -105,7 +103,7 @@ mkdir build-binutils && cd build-binutils
 make -j 8
 make install
 ```
-Edit gcc-10.3.0/libsanitizer/asan/asan_linux.cpp. Add following piece of code.
+Edit gcc-10.3.0/libsanitizer/asan/asan_linux.cpp. Add following piece of code line 67.
 ```
 #ifndef PATH_MAX
 #define PATH_MAX 4096
@@ -161,13 +159,13 @@ mkdir qt6 qt6/host qt6/pi qt6/host-build qt6/pi-build qt6/src
 Download QtBase source code
 ```
 cd ~/qt6/src
-wget https://download.qt.io/official_releases/qt/6.5/6.5.1/submodules/qtbase-everywhere-src-6.5.1.tar.xz
-tar xf qtbase-everywhere-src-6.5.1.tar.xz
+wget https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtbase-everywhere-src-6.8.1.tar.xz
+tar xf qtbase-everywhere-src-6.8.1.tar.xz
 ```
 ### Build Qt6 for host
 ```
 cd $HOME/qt6/host-build/
-cmake ../src/qtbase-everywhere-src-6.5.1/ -GNinja -DCMAKE_BUILD_TYPE=Release -DQT_BUILD_EXAMPLES=OFF -DQT_BUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$HOME/qt6/host
+cmake ../src/qtbase-everywhere-src-6.8.1/ -GNinja -DCMAKE_BUILD_TYPE=Release -DQT_BUILD_EXAMPLES=OFF -DQT_BUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=$HOME/qt6/host
 cmake --build . --parallel 8
 cmake --install .
 ```
@@ -176,10 +174,10 @@ Binaries will be in $HOME/qt6/host
 copy and paste a few folders from rpi using rsync through SSH. **You should modify the following commands to your needs.**
 ```
 cd ~
-rsync -avz --rsync-path="sudo rsync" pi@192.168.6.218:/usr/include rpi-sysroot/usr
-rsync -avz --rsync-path="sudo rsync" pi@192.168.6.218:/lib rpi-sysroot
-rsync -avz --rsync-path="sudo rsync" pi@192.168.6.218:/usr/lib rpi-sysroot/usr 
-rsync -avz --rsync-path="sudo rsync" pi@192.168.6.218:/opt/vc rpi-sysroot/opt
+rsync -avz --rsync-path="sudo rsync" cooruja@192.168.3.107:/usr/include rpi-sysroot/usr
+rsync -avz --rsync-path="sudo rsync" cooruja@192.168.3.107:/lib rpi-sysroot
+rsync -avz --rsync-path="sudo rsync" cooruja@192.168.3.107:/usr/lib rpi-sysroot/usr 
+rsync -avz --rsync-path="sudo rsync" cooruja@192.168.3.107:/opt/vc rpi-sysroot/opt
 ```
 Create a file named toolchain.cmake in $HOME/qt6.
 ```
